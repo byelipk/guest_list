@@ -1,19 +1,24 @@
 defmodule GuestList do
-  alias GuestList.{Parser}
+  alias GuestList.{Aggregator}
 
-  defdelegate parse(), to: Parser
-  defdelegate names(), to: Parser
-  defdelegate emails(), to: Parser
-
-  def print(:names) do
-    Enum.each(names(), fn({{ _, name, _ }, _}) ->
+  def names() do
+    Aggregator.names()
+    |> Enum.each(fn({{ _, name, _ }, _}) ->
       IO.puts(name)
     end)
   end
 
-  def print(:emails) do
-    Enum.each(emails(), fn({{ _, email, _ }, _}) ->
+  def emails() do
+    Aggregator.emails()
+    |> Enum.each(fn({{ _, email, _ }, _}) ->
       IO.puts(email)
+    end)
+  end
+
+  def aggregate() do
+    Aggregator.aggregate()
+    |> Enum.each(fn(line) ->
+      IO.inspect(line)
     end)
   end
 end
