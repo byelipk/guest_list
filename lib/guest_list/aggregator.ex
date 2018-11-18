@@ -2,30 +2,27 @@ defmodule GuestList.Aggregator do
 
   alias GuestList.{Parser, Sanitizer}
 
-  defdelegate parse(), to: Parser
   defdelegate clean(rtf), to: Sanitizer
 
-  def aggregate() do
-    {:ok, parsed } = parse()
+  def parse() do
+    {:ok, parsed } = Parser.parse()
     parsed
     |> clean()
     |> Enum.with_index()
+  end
+
+  def aggregate() do
+    parse()
     |> aggregate_lines()
   end
 
   def emails() do
-    {:ok, parsed } = parse()
-    parsed
-    |> clean()
-    |> Enum.with_index()
+    parse()
     |> Enum.filter(&is_email?(&1))
   end
 
   def names() do
-    {:ok, parsed } = parse()
-    parsed
-    |> clean()
-    |> Enum.with_index()
+    parse()
     |> Enum.reject(&is_email?(&1))
   end
 
